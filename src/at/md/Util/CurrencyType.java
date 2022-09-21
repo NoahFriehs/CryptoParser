@@ -1,14 +1,9 @@
 package at.md.Util;
 
-public enum CurrencyType {
+import java.util.ArrayList;
 
-    EUR,
-    BTC,
-    ETH,
-    CRO,
-    ALGO,
-    LUNA,
-    LUNA2,
-    LUNC
+public class CurrencyType {
+
+    public static ArrayList<String> currencys = new ArrayList<>();
 
 }

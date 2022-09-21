@@ -14,7 +14,7 @@ public class CardWallet extends Wallet {
     String transactionType;
     ArrayList<CardTX> txs = new ArrayList<CardTX>();
 
-    public CardWallet(CurrencyType currencyType, BigDecimal amount, String transactionType) {
+    public CardWallet(String currencyType, BigDecimal amount, String transactionType) {
         super(currencyType, amount, amount);
         this.transactionType = transactionType;
         if (!tts.contains(transactionType)) {
@@ -30,7 +30,7 @@ public class CardWallet extends Wallet {
             w.addToCardWallet(transaction.getAmount());
             w.txs.add(transaction);
         } else {
-            CardWallet w = new CardWallet(CurrencyType.EUR, transaction.getAmount(), tt);
+            CardWallet w = new CardWallet("EUR", transaction.getAmount(), tt);
             //w.addToCardWallet(transaction.getAmount());
             w.txs.add(transaction);
             cardWallets.add(w);

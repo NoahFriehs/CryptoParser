@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import static at.md.Util.Converter.ctConverter;
 
 public class CardTxApp {
 
@@ -59,7 +58,7 @@ public class CardTxApp {
             try {
                 String[] sa = transaction.split(",");
                 if (sa.length == 9) {
-                    CardTX t = new CardTX(sa[0], sa[1], ctConverter(sa[2]), (BigDecimal) decimalFormat.parse(sa[7]), (BigDecimal) decimalFormat.parse(sa[7]), (sa[1]));
+                    CardTX t = new CardTX(sa[0], sa[1], sa[2], (BigDecimal) decimalFormat.parse(sa[7]), (BigDecimal) decimalFormat.parse(sa[7]), (sa[1]));
 
                     transactions.add(t);
 

@@ -10,17 +10,19 @@ public class Transaction {
 
     Date date;
     String description;
-    CurrencyType currencyType;
+    String currencyType;
     java.math.BigDecimal amount;
     java.math.BigDecimal nativeAmount;
     TransactionType transactionType;
     String transHash;
 
-    CurrencyType toCurrency;
+    String toCurrency;
 
     java.math.BigDecimal toAmount;
 
-    public Transaction(String date, String description, CurrencyType currencyType, BigDecimal amount, BigDecimal nativeAmount, TransactionType transactionType) {
+    public Transaction(String date, String description, String currencyType, BigDecimal amount, BigDecimal nativeAmount, TransactionType transactionType) {
+
+        if (!CurrencyType.currencys.contains(currencyType)) CurrencyType.currencys.add(currencyType);
 
         this.date = Converter.dateConverter(date);
         this.description = description;
@@ -36,7 +38,7 @@ public class Transaction {
         return date;
     }
 
-    public CurrencyType getCurrencyType() {
+    public String getCurrencyType() {
         return currencyType;
     }
 
@@ -60,11 +62,11 @@ public class Transaction {
         return transHash;
     }
 
-    public CurrencyType getToCurrency() {
+    public String getToCurrency() {
         return toCurrency;
     }
 
-    public void setToCurrency(CurrencyType toCurrency) {
+    public void setToCurrency(String toCurrency) {
         this.toCurrency = toCurrency;
     }
 

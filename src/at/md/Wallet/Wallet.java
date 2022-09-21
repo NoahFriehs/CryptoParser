@@ -14,14 +14,14 @@ import static at.md.General.TxApp.wallets;
 
 public class Wallet {
 
-    CurrencyType currencyType;
+    String currencyType;
     BigDecimal amount;
     BigDecimal amountBonus;
     BigDecimal moneySpent;
 
     ArrayList<Transaction> transactions;
 
-    public Wallet(CurrencyType currencyType, BigDecimal amount, BigDecimal nativeAmount) {
+    public Wallet(String  currencyType, BigDecimal amount, BigDecimal nativeAmount) {
         this.currencyType = currencyType;
         this.amount = new BigDecimal(0);
         this.amount = this.amount.add(amount);
@@ -31,7 +31,7 @@ public class Wallet {
         this.transactions = new ArrayList<>();
     }
 
-    public static int getWallet(CurrencyType ct) {
+    public static int getWallet(String ct) {
         int i = 0;
         for (Wallet w : wallets) {
             if (w.getCurrencyType().equals(ct)) return i;
@@ -66,7 +66,7 @@ public class Wallet {
         System.out.println("Amount total spent: " + amountSpent);
     }
 
-    public CurrencyType getCurrencyType() {
+    public String getCurrencyType() {
         return currencyType;
     }
 

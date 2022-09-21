@@ -248,15 +248,15 @@ public class Application {
                     System.out.println("Enter the Wallet you want to use: ");
                     String s = scanner.nextLine();
                     try {
-                        CurrencyType ct = ctConverter(s);
+                        if (!CurrencyType.currencys.contains(s)) continue;
                         for (Wallet w : TxApp.wallets) {
-                            if (w.getCurrencyType().equals(ct)) {
+                            if (w.getCurrencyType().equals(s)) {
                                 for (Transaction tx : w.getTransactions())
                                     System.out.println(tx.toString());
                             }
                         }
                         for (Wallet w : TxApp.outsideWallets) {
-                            if (w.getCurrencyType().equals(ct)) {
+                            if (w.getCurrencyType().equals(s)) {
                                 for (Transaction tx : w.getTransactions())
                                     System.out.println(tx.toString());
                             }
