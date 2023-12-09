@@ -1,11 +1,11 @@
 package at.md.General;
 
-import at.md.Transactions.CardTX;
+import at.md.Transactions.CroCardTransaction;
 import at.md.Transactions.Transaction;
 import at.md.Transactions.TransactionType;
 import at.md.Util.Converter;
 import at.md.Util.CurrencyType;
-import at.md.Wallet.CardWallet;
+import at.md.Wallet.CroCardWallet;
 import at.md.Wallet.Wallet;
 
 import java.io.File;
@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
-import static at.md.Util.Converter.*;
+import static at.md.Util.Converter.stringToDateConverter;
+import static at.md.Util.Converter.ttConverter;
 
 public class Application {
 
@@ -38,7 +39,7 @@ public class Application {
                 }
 
                 case 2 -> {
-                    CardTxApp.main(new String[]{datapath});
+                    CardTxApp cardTxApp = new CardTxApp(datapath, false);
                     userInterfaceCardTxApp();
                 }
             }
@@ -49,7 +50,7 @@ public class Application {
     private static String getDatapath() {
 
         System.out.println("Enter path of .csv file");
-        String input = "";
+        String input;
         try {
             input = scanner.nextLine();
         } catch (Exception e) {
@@ -134,9 +135,9 @@ public class Application {
                     System.out.println("Enter the type you want to display: ");
                     String s = scanner.nextLine();
                     try {
-                        for (CardWallet w : CardTxApp.cardWallets) {
+                        for (CroCardWallet w : CardTxApp.cardWallets) {
                             if (w.getTransactionType().contains(s)) {
-                                for (CardTX tx : w.getTxs())
+                                for (CroCardTransaction tx : w.getTxs())
                                     System.out.println(tx.toString());
                             }
                         }
@@ -148,7 +149,7 @@ public class Application {
 
                 case 2 -> {
                     BigDecimal bd = readNumber("Enter the transaction amount: ");
-                    for (CardTX t : CardTxApp.transactions) {
+                    for (CroCardTransaction t : CardTxApp.transactions) {
                         if (Objects.equals(t.getAmount(), bd)) {
                             System.out.println(t);
                         }
@@ -158,14 +159,14 @@ public class Application {
                 case 3 -> {
                     System.out.print("Enter the year (yyyy): ");
                     int year = readNumber("").intValue();
-                    ArrayList<CardTX> rightTX = new ArrayList<>();
-                    ArrayList<CardTX> rightMonthTX = new ArrayList<>();
-                    ArrayList<CardTX> rightDayTX = new ArrayList<>();
+                    ArrayList<CroCardTransaction> rightTX = new ArrayList<>();
+                    ArrayList<CroCardTransaction> rightMonthTX = new ArrayList<>();
+                    ArrayList<CroCardTransaction> rightDayTX = new ArrayList<>();
                     int txPerYear = 0;
                     int txPerMonth = 0;
                     int txPerDay = 0;
-                    for (CardTX t : CardTxApp.transactions) {
-                        if (Integer.parseInt(Converter.dateConverterer(t.getDate()).substring(0, 4)) == year) {
+                    for (CroCardTransaction t : CardTxApp.transactions) {
+                        if (Integer.parseInt(Converter.stringToDateConverter(t.getDate()).substring(0, 4)) == year) {
                             txPerYear++;
                             rightTX.add(t);
                         }
@@ -175,14 +176,14 @@ public class Application {
                     int month = readNumber("").intValue();
 
                     if (month == 0) {
-                        for (CardTX t : rightTX) {
+                        for (CroCardTransaction t : rightTX) {
                             System.out.println(t.toString());
                         }
                         break;
                     } else {
 
-                        for (CardTX t : rightTX) {
-                            if (Integer.parseInt(dateConverterer(t.getDate()).substring(5, 7)) == month) {
+                        for (CroCardTransaction t : rightTX) {
+                            if (Integer.parseInt(stringToDateConverter(t.getDate()).substring(5, 7)) == month) {
                                 txPerMonth++;
                                 rightMonthTX.add(t);
                             }
@@ -193,26 +194,26 @@ public class Application {
                     int day = readNumber("").intValue();
 
                     if (day == 0) {
-                        for (CardTX t : rightMonthTX) {
+                        for (CroCardTransaction t : rightMonthTX) {
                             System.out.println(t.toString());
                         }
                     } else {
 
-                        for (CardTX t : rightMonthTX) {
-                            if (Integer.parseInt(dateConverterer(t.getDate()).substring(8, 10)) == day) {
+                        for (CroCardTransaction t : rightMonthTX) {
+                            if (Integer.parseInt(stringToDateConverter(t.getDate()).substring(8, 10)) == day) {
                                 txPerDay++;
                                 rightDayTX.add(t);
                             }
                         }
                         System.out.println("" + txPerDay + " transaction(s)");
-                        for (CardTX t : rightDayTX) {
+                        for (CroCardTransaction t : rightDayTX) {
                             System.out.println(t.toString());
                         }
                     }
                 }
 
                 case 4 -> {
-                    CardWallet.writeAmount();
+                    CroCardWallet.writeAmount();
                 }
 
                 case 9 -> {
@@ -238,7 +239,7 @@ public class Application {
         boolean continued = true;
         while (continued) {
             int value = readNumber("").intValue();
-            if (value < 0 || (value > 7 && value != 9)) {
+            if (value < 0 || (value > 8 && value != 9)) {
                 System.out.println("Invalid input");
                 continue;
             }
@@ -316,7 +317,7 @@ public class Application {
                     int txPerMonth = 0;
                     int txPerDay = 0;
                     for (Transaction t : TxApp.transactions) {
-                        if (Integer.parseInt(Converter.dateConverterer(t.getDate()).substring(0, 4)) == year) {
+                        if (Integer.parseInt(Converter.stringToDateConverter(t.getDate()).substring(0, 4)) == year) {
                             txPerYear++;
                             rightTX.add(t);
                         }
@@ -333,7 +334,7 @@ public class Application {
                     } else {
 
                         for (Transaction t : rightTX) {
-                            if (Integer.parseInt(dateConverterer(t.getDate()).substring(5, 7)) == month) {
+                            if (Integer.parseInt(stringToDateConverter(t.getDate()).substring(5, 7)) == month) {
                                 txPerMonth++;
                                 rightMonthTX.add(t);
                             }
@@ -350,7 +351,7 @@ public class Application {
                     } else {
 
                         for (Transaction t : rightMonthTX) {
-                            if (Integer.parseInt(dateConverterer(t.getDate()).substring(8, 10)) == day) {
+                            if (Integer.parseInt(stringToDateConverter(t.getDate()).substring(8, 10)) == day) {
                                 txPerDay++;
                                 rightDayTX.add(t);
                             }
@@ -363,6 +364,23 @@ public class Application {
                 }
 
                 case 7 -> Wallet.writeAmount();
+
+                case 8 -> {
+                    System.out.println("Enter the outside Wallet you want to inspect: ");
+                    String s = scanner.nextLine();
+                    try {
+                        if (!CurrencyType.currencys.contains(s)) continue;
+                        for (Wallet w : TxApp.outsideWallets) {
+                            if (w.getCurrencyType().equals(s)) {
+                                for (Transaction tx : w.getTransactions())
+                                    System.out.println(tx.toString());
+                            }
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Invalid Input");
+
+                    }
+                }
 
                 case 9 -> userInstructionsTxApp();
             }
@@ -380,7 +398,8 @@ public class Application {
         System.out.println("Press 4 to get transaction by native amount");
         System.out.println("Press 5 to get transaction by transaction hash");
         System.out.println("Press 6 to get transaction by date");
-        System.out.println("Press 7 to get all wallets with amount");
+        System.out.println("Press 7 to get all wallets");
+        System.out.println("Press 8 to get outside Wallet by name");
         System.out.println("Press 9 for help");
     }
 }

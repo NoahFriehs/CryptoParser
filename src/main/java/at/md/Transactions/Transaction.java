@@ -62,6 +62,10 @@ public class Transaction {
         return transHash;
     }
 
+    public void setTransHash(String transHash) {
+        this.transHash = transHash;
+    }
+
     public String getToCurrency() {
         return toCurrency;
     }
