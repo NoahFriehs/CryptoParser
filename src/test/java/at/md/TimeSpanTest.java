@@ -1,7 +1,7 @@
 package at.md;
 
 import at.md.Util.TimeSpan;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +9,6 @@ class TimeSpanTest {
 
     @Test
     void testElapsedTime() {
-
         TimeSpan timeSpan = new TimeSpan();
 
         timeSpan.start();
