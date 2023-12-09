@@ -41,12 +41,8 @@ public class TxAppTest {
     // The createWallets method should create two empty wallet lists, one for internal wallets and one for outside wallets
     @Test
     public void test_create_wallets() {
-        // Arrange
-
-        // Act
         TxApp.createWallets();
 
-        // Assert
         assertEquals(0, TxApp.wallets.size());
         assertEquals(0, TxApp.outsideWallets.size());
     }
@@ -75,24 +71,16 @@ public class TxAppTest {
     // If the input ArrayList in getTransactions is empty, an empty ArrayList of transactions should be returned
     @Test
     public void test_empty_input() {
-        // Arrange
         ArrayList<String> input = new ArrayList<>();
-
-        // Act
         ArrayList<Transaction> result = TxApp.getTransactions(input);
-
-        // Assert
         assertEquals(0, result.size());
     }
 
     // If the input ArrayList in getTransactions contains an invalid number of elements, a RuntimeException should be thrown
     @Test
     public void test_invalid_input() {
-        // Arrange
         ArrayList<String> input = new ArrayList<>();
         input.add("date,description,currencyType,amount,nativeAmount,transactionType");
-
-        // Act & Assert
         assertThrows(RuntimeException.class, () -> TxApp.getTransactions(input));
     }
 
