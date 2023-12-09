@@ -2,7 +2,6 @@ package at.md.Wallet;
 
 import at.md.Transactions.Transaction;
 import at.md.Transactions.TransactionType;
-import at.md.Util.CurrencyType;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -14,14 +13,14 @@ import static at.md.General.TxApp.wallets;
 
 public class Wallet {
 
-    CurrencyType currencyType;
+    String currencyType;
     BigDecimal amount;
     BigDecimal amountBonus;
     BigDecimal moneySpent;
 
     ArrayList<Transaction> transactions;
 
-    public Wallet(CurrencyType currencyType, BigDecimal amount, BigDecimal nativeAmount) {
+    public Wallet(String  currencyType, BigDecimal amount, BigDecimal nativeAmount) {
         this.currencyType = currencyType;
         this.amount = new BigDecimal(0);
         this.amount = this.amount.add(amount);
@@ -31,7 +30,7 @@ public class Wallet {
         this.transactions = new ArrayList<>();
     }
 
-    public static int getWallet(CurrencyType ct) {
+    public static int getWallet(String ct) {
         int i = 0;
         for (Wallet w : wallets) {
             if (w.getCurrencyType().equals(ct)) return i;
@@ -45,8 +44,8 @@ public class Wallet {
         for (Wallet w : wallets) {
             System.out.println("-".repeat(20));
             System.out.println(w.getCurrencyType());
-            System.out.println(w.amount);
-            System.out.println(w.moneySpent);
+            System.out.println("Amount: " + w.amount);
+            System.out.println("Money spent: " + w.moneySpent);
             System.out.println("Bonus: " + w.amountBonus);
             if (!Objects.equals(w.amount, BigDecimal.ZERO))
                 if (!Objects.equals(w.amount, w.amountBonus))
@@ -58,15 +57,14 @@ public class Wallet {
             if (Objects.equals(w.amount, BigDecimal.ZERO)) continue;
             System.out.println("-".repeat(20));
             System.out.println("Outside-" + w.getCurrencyType());
-            System.out.println(w.amount);
-            System.out.println(w.moneySpent);
+            System.out.println("Amount: " + w.amount);
             System.out.println("Transactions: " + w.transactions.size());
         }
         System.out.println("-".repeat(20));
         System.out.println("Amount total spent: " + amountSpent);
     }
 
-    public CurrencyType getCurrencyType() {
+    public String getCurrencyType() {
         return currencyType;
     }
 
@@ -100,14 +98,12 @@ public class Wallet {
                 //do nothing
             }
             case rewards_platform_deposit_credited -> {
-                //w.addToWallet(transaction.getAmount(), (double) 0);
+                //do nothing
             }
             case supercharger_reward_to_app_credited -> {
                 w.addToWallet(transaction.getAmount(), BigDecimal.ZERO, transaction.getAmount());
             }
             case viban_purchase -> {
-                //strange
-                //w.addToWallet(transaction.getAmount(), transaction.getNativeAmount());
                 Wallet wv = wallets.get(Wallet.getWallet(transaction.getToCurrency()));
                 wv.addToWallet(transaction.getToAmount(), transaction.getNativeAmount(), BigDecimal.ZERO);
             }
@@ -144,9 +140,18 @@ public class Wallet {
                 w.addToWallet(transaction.getAmount(), BigDecimal.ZERO, transaction.getAmount());
             }
             case crypto_wallet_swap_credited -> {
-
+                w.addToWallet(transaction.getAmount(), BigDecimal.ZERO, transaction.getAmount());
             }
             case crypto_wallet_swap_debited -> {
+                w.addToWallet(transaction.getAmount(), BigDecimal.ZERO, transaction.getAmount());
+            }
+            case crypto_deposit -> {
+                w.addToWallet(transaction.getAmount(), BigDecimal.ZERO, BigDecimal.ZERO);
+                Wallet wt = wallets.get(Wallet.getWallet(transaction.getCurrencyType()));
+                if (!wt.transactions.contains(transaction)) {
+                    wt.transactions.add(transaction);
+                }
+                wt.removeFromWallet(transaction.getAmount(), BigDecimal.ZERO);
             }
         }
     }

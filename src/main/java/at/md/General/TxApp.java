@@ -4,6 +4,7 @@ import at.md.Transactions.Transaction;
 import at.md.Transactions.TransactionType;
 import at.md.Util.CurrencyType;
 import at.md.Util.IOHandler;
+import at.md.Util.TimeSpan;
 import at.md.Wallet.Wallet;
 
 import java.math.BigDecimal;
@@ -12,7 +13,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static at.md.Util.Converter.ctConverter;
 import static at.md.Util.Converter.ttConverter;
 
 
@@ -24,13 +24,21 @@ public class TxApp {
 
     public static void main(String[] args) {
         try {
+            TimeSpan timeSpan = new TimeSpan();
+            timeSpan.start();
             transactions = getTransactions(IOHandler.readFile(args[0]));
+            System.out.println( "getTransactions msecs: " + timeSpan.end());
         } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("We have " + transactions.size() + " transaction(s).");
+        TimeSpan timeSpan = new TimeSpan();
+        timeSpan.start();
         createWallets();
+        System.out.println( "createWallets msecs: " + timeSpan.end());
+        timeSpan.start();
         fillWallet(transactions);
+        System.out.println( "fillWallet msecs: " + timeSpan.end());
 
     }
 
@@ -57,18 +65,19 @@ public class TxApp {
             try {
                 String[] sa = transaction.split(",");
                 if (sa.length == 10 || sa.length == 11) {
-                    Transaction t = new Transaction(sa[0], sa[1], ctConverter(sa[2]), BigDecimal.ZERO, BigDecimal.ZERO, ttConverter(sa[9]));
+                    Transaction t;
                     if (Double.parseDouble(sa[3]) == 0) {
                         if (Double.parseDouble(sa[7]) == 0) {
-                            t = new Transaction(sa[0], sa[1], ctConverter(sa[2]), BigDecimal.ZERO, BigDecimal.ZERO, ttConverter(sa[9]));
+                            t = new Transaction(sa[0], sa[1], sa[2], BigDecimal.ZERO, BigDecimal.ZERO, ttConverter(sa[9]));
                         } else {
-                            t = new Transaction(sa[0], sa[1], ctConverter(sa[2]), BigDecimal.ZERO, (BigDecimal) decimalFormat.parse(sa[7]), ttConverter(sa[9]));
+                            t = new Transaction(sa[0], sa[1], sa[2], BigDecimal.ZERO, (BigDecimal) decimalFormat.parse(sa[7]), ttConverter(sa[9]));
                         }
                     } else {
-                        t = new Transaction(sa[0], sa[1], ctConverter(sa[2]), (BigDecimal) decimalFormat.parse(sa[3]), (BigDecimal) decimalFormat.parse(sa[7]), ttConverter(sa[9]));
+                        t = new Transaction(sa[0], sa[1], sa[2], (BigDecimal) decimalFormat.parse(sa[3]), (BigDecimal) decimalFormat.parse(sa[7]), ttConverter(sa[9]));
                     }
+                    if (sa.length ==  11) t.setTransHash(sa[10]);
                     if (ttConverter(sa[9]) == TransactionType.viban_purchase) {
-                        t.setToCurrency(ctConverter(sa[4]));
+                        t.setToCurrency(sa[4]);
                         t.setToAmount(BigDecimal.valueOf(Double.parseDouble(sa[5])));
                     }
                     transactions.add(t);
@@ -85,10 +94,10 @@ public class TxApp {
     }
 
     private static void createWallets() {
-        for (CurrencyType t : CurrencyType.values()) {
+        for (String t : CurrencyType.currencys) {
             wallets.add(new Wallet(t, BigDecimal.ZERO, BigDecimal.ZERO));
         }
-        for (CurrencyType t : CurrencyType.values()) {
+        for (String t : CurrencyType.currencys) {
             outsideWallets.add(new Wallet(t, BigDecimal.ZERO, BigDecimal.ZERO));
         }
     }

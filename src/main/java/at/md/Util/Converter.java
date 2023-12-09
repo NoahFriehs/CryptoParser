@@ -21,15 +21,15 @@ public class Converter {
     }
 
 
-    public static CurrencyType ctConverter(String s) {
-        s = s.trim().toUpperCase();
-        try {
-            return CurrencyType.valueOf(s);
-        } catch (Exception e) {
-            System.out.println(s);
-            return null;
-        }
-    }
+//    public static CurrencyType ctConverter(String s) {
+//        s = s.trim().toUpperCase();
+//        try {
+//            return CurrencyType.valueOf(s);
+//        } catch (Exception e) {
+//            System.out.println(s);
+//            return null;
+//        }
+//    }
 
 
     public static Date dateConverter(String s) {
@@ -42,11 +42,10 @@ public class Converter {
         }
     }
 
-    public static String dateConverterer(Date s) {
+    public static String stringToDateConverter(Date s) {
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String strDate = dateFormat.format(s);
-            return strDate;
+            return dateFormat.format(s);
         } catch (Exception e) {
             System.out.println(s);
             return null;

@@ -11,7 +11,8 @@ public enum TransactionType {
     crypto_earn_interest_paid,  //Earn interest
     supercharger_withdrawal, //Withdrawal from supercharger
     lockup_lock,    //lock for stake
-    crypto_withdrawal,  //Deposit to DeFi
+    crypto_withdrawal,  //withdrawal
+    crypto_deposit,
     referral_card_cashback, //Card Cashback
     reimbursement,  //Money back for Spotify
     card_cashback_reverted,  //Cashbackreverted

@@ -1,28 +1,31 @@
 package at.md.General;
 
-import at.md.Transactions.CardTX;
+import at.md.Transactions.CroCardTransaction;
 import at.md.Util.IOHandler;
-import at.md.Wallet.CardWallet;
+import at.md.Wallet.CroCardWallet;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
-import static at.md.Util.Converter.ctConverter;
+
 
 public class CardTxApp {
 
+    public static ArrayList<CroCardWallet> cardWallets = new ArrayList<>();
+    public static ArrayList<CroCardTransaction> transactions = new ArrayList<>();
 
-    public static final Scanner scanner = new Scanner(System.in);
-    public static ArrayList<CardWallet> cardWallets = new ArrayList<>();
-    public static ArrayList<CardTX> transactions = new ArrayList<>();
+    /**
+     * Can lead to some false wallets bc of Currencies TODO
+     */
+    public static boolean useStrictWalletType;
 
-    public static void main(String[] args) {
+    CardTxApp(String filepath, boolean useStrictWallet) {
+        useStrictWalletType = useStrictWallet;
         try {
-            transactions = getTransactions(IOHandler.readFile(args[0]));
+            transactions = getTransactions(IOHandler.readFile(filepath));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -33,19 +36,15 @@ public class CardTxApp {
     }
 
 
-    public static ArrayList<CardTX> getTransactions() {
-        return transactions;
-    }
-
     /**
-     * Csv file to CardTX list
+     * Csv file to CroCardTransaction list
      *
      * @param input csv file as String list
-     * @return CardTX list
+     * @return CroCardTransaction list
      */
-    private static ArrayList<CardTX> getTransactions(ArrayList<String> input) {
+    private static ArrayList<CroCardTransaction> getTransactions(ArrayList<String> input) {
         input.remove(0);
-        ArrayList<CardTX> transactions = new ArrayList<>();
+        ArrayList<CroCardTransaction> transactions = new ArrayList<>();
 
         // Create a DecimalFormat that fits your requirements
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
@@ -59,7 +58,7 @@ public class CardTxApp {
             try {
                 String[] sa = transaction.split(",");
                 if (sa.length == 9) {
-                    CardTX t = new CardTX(sa[0], sa[1], ctConverter(sa[2]), (BigDecimal) decimalFormat.parse(sa[7]), (BigDecimal) decimalFormat.parse(sa[7]), (sa[1]));
+                    CroCardTransaction t = new CroCardTransaction(sa[0], sa[1], sa[2], (BigDecimal) decimalFormat.parse(sa[7]), (BigDecimal) decimalFormat.parse(sa[7]), (sa[1]));
 
                     transactions.add(t);
 
@@ -75,9 +74,9 @@ public class CardTxApp {
     }
 
 
-    private static void fillWallet(ArrayList<CardTX> tr) {
-        for (CardTX t : tr) {
-            CardWallet.addTransaction(t);
+    private static void fillWallet(ArrayList<CroCardTransaction> tr) {
+        for (CroCardTransaction t : tr) {
+            CroCardWallet.addTransaction(t);
         }
     }
 
