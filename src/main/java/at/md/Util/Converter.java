@@ -9,7 +9,7 @@ import java.util.Date;
 public class Converter {
 
     public static TransactionType ttConverter(String s) {
-
+        if (s == null) return null;
         s = s.trim().toLowerCase();
         try {
             return TransactionType.valueOf(s);
@@ -20,7 +20,6 @@ public class Converter {
 
     }
 
-
 //    public static CurrencyType ctConverter(String s) {
 //        s = s.trim().toUpperCase();
 //        try {
@@ -30,7 +29,6 @@ public class Converter {
 //            return null;
 //        }
 //    }
-
 
     public static Date dateConverter(String s) {
         try {
