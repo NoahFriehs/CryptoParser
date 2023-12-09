@@ -1,7 +1,7 @@
 package at.md;
 
 import at.md.Util.IOHandler;
-import org.junit.jupiter.api.Test;
+import org.testng.annotations.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
