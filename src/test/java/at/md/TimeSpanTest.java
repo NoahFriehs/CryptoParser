@@ -3,9 +3,9 @@ package at.md;
 import at.md.Util.TimeSpan;
 import org.testng.annotations.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.testng.Assert.*;
 
-class TimeSpanTest {
+public class TimeSpanTest {
 
     @Test
     void testElapsedTime() {
