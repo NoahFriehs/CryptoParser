@@ -21,7 +21,7 @@ import static at.md.Util.Converter.ttConverter;
 
 public class Application {
 
-    public static final Scanner scanner = new Scanner(System.in);
+    public static Scanner scanner = new Scanner(System.in);
 
     static String datapath = null;
 
@@ -39,7 +39,7 @@ public class Application {
                 }
 
                 case 2 -> {
-                    CardTxApp cardTxApp = new CardTxApp(datapath, false);
+                    new CardTxApp(datapath, false);
                     userInterfaceCardTxApp();
                 }
             }
@@ -47,7 +47,7 @@ public class Application {
         }
     }
 
-    private static String getDatapath() {
+    public static String getDatapath() {
 
         System.out.println("Enter path of .csv file");
         String input;
@@ -61,7 +61,7 @@ public class Application {
         if (new File(input).exists())
             if (new File(input).isFile())
                 return input;
-        System.out.println("Invalid input");
+        System.out.println("Invalid input, file does not exist");
         return null;
 
     }
@@ -72,7 +72,7 @@ public class Application {
      *
      * @return the entered number.
      */
-    static BigDecimal readNumber(String usage) {
+    public static BigDecimal readNumber(String usage) {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setGroupingSeparator(',');
         symbols.setDecimalSeparator('.');
@@ -110,7 +110,7 @@ public class Application {
             }
 
             if (input < 0 || input > 3)
-                System.out.println("Invalid input");
+                System.out.println("Invalid input, try 0 or 1 or 2 or 3");
             else return input;
 
         }
@@ -122,7 +122,7 @@ public class Application {
             System.out.print(">");
             int value = readNumber("").intValue();
             if (value < 0 || (value > 4 && value != 9)) {
-                System.out.println("Invalid input");
+                System.out.println("Invalid input, try 0 or 1 or 2 or 3 or 4 or 9");
                 continue;
             }
 
@@ -205,7 +205,7 @@ public class Application {
                                 rightDayTX.add(t);
                             }
                         }
-                        System.out.println("" + txPerDay + " transaction(s)");
+                        System.out.println(txPerDay + " transaction(s)");
                         for (CroCardTransaction t : rightDayTX) {
                             System.out.println(t.toString());
                         }
@@ -223,7 +223,7 @@ public class Application {
         }
     }
 
-    static void userInstructionsCardTxApp() {
+    public static void userInstructionsCardTxApp() {
 
         System.out.println("Press 0 to exit");
         System.out.println("Press 1 to get all transactions from 1 type");
@@ -390,7 +390,7 @@ public class Application {
     }
 
 
-    static void userInstructionsTxApp() {
+    public static void userInstructionsTxApp() {
         System.out.println("Press 0 to exit");
         System.out.println("Press 1 to get all transactions from 1 wallet");
         System.out.println("Press 2 to get transactions by transaction type");

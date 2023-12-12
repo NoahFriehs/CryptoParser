@@ -55,6 +55,7 @@ public class TtConverterTest {
     @Test
     public void test_null_input() {
         String input = null;
+        //noinspection ConstantValue    // IntelliJ thinks this is a constant value, which is true, but I want to test it anyway
         TransactionType result = Converter.ttConverter(input);
         assertNull(result);
     }
