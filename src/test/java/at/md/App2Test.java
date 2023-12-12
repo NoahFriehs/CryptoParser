@@ -1,6 +1,9 @@
 package at.md;
 
 import at.md.General.Application;
+import at.md.General.CardTxApp;
+import at.md.Transactions.CroCardTransaction;
+import at.md.Wallet.CroCardWallet;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
@@ -60,18 +63,99 @@ public class App2Test {
         Application.userInstructionsTxApp();
 
         System.setOut(System.out);
-        String expectedOutput = "Press 0 to exit\n" +
-                "Press 1 to get all transactions from 1 wallet\n" +
-                "Press 2 to get transactions by transaction type\n" +
-                "Press 3 to get transaction by amount\n" +
-                "Press 4 to get transaction by native amount\n" +
-                "Press 5 to get transaction by transaction hash\n" +
-                "Press 6 to get transaction by date\n" +
-                "Press 7 to get all wallets\n" +
-                "Press 8 to get outside Wallet by name\n" +
-                "Press 9 for help\n";
+        String expectedOutput = """
+                Press 0 to exit
+                Press 1 to get all transactions from 1 wallet
+                Press 2 to get transactions by transaction type
+                Press 3 to get transaction by amount
+                Press 4 to get transaction by native amount
+                Press 5 to get transaction by transaction hash
+                Press 6 to get transaction by date
+                Press 7 to get all wallets
+                Press 8 to get outside Wallet by name
+                Press 9 for help
+                """;
 
         assertEquals(outputStream.toString(), expectedOutput);
 
+    }
+
+    @Test
+    public void testuserInterfaceCardTxApp0() {
+        String input = "0";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        InputStream originalIn = System.in;
+        PrintStream originalOut = System.out;
+        System.setIn(in);
+        Application.scanner = new java.util.Scanner(in);
+        Application.userInterfaceCardTxApp();
+        System.setIn(originalIn);
+        System.setOut(originalOut);
+        assert true;    //looks like bs but it s not, bc we want to end the program
+
+        CroCardWallet.tts.clear();
+        CardTxApp.cardWallets.clear();
+        CardTxApp.transactions.clear();
+    }
+
+    @Test
+    public void testuserInterfaceCardTxApp1() {
+        String input = """
+                1
+                t
+                0
+                """;
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        InputStream originalIn = System.in;
+        PrintStream originalOut = System.out;
+        System.setIn(in);
+        Application.scanner = new java.util.Scanner(in);
+
+        CroCardWallet w = new CroCardWallet("test", BigDecimal.ZERO, "test");
+        CardTxApp.cardWallets.add(w);
+        CroCardWallet.addTransaction(new CroCardTransaction("01-02-2000 00:00:00", "test", "test", BigDecimal.ZERO, BigDecimal.ZERO, "test"));
+
+        CardTxApp.cardWallets.add(w);
+
+        Application.userInterfaceCardTxApp();
+        assert true;    //looks like bs but it s not, bc we want to end the program
+        System.setIn(originalIn);
+        System.setOut(originalOut);
+
+        CroCardWallet.tts.clear();
+        CardTxApp.cardWallets.clear();
+        CardTxApp.transactions.clear();
+    }
+
+    @Test
+    public void testuserInterfaceCardTxApp2() {
+        String input = """
+                2
+                0
+                0
+                """;
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        InputStream originalIn = System.in;
+        PrintStream originalOut = System.out;
+        System.setIn(in);
+        Application.scanner = new java.util.Scanner(in);
+
+        CroCardWallet w = new CroCardWallet("test", BigDecimal.ZERO, "test");
+        CroCardTransaction tx = new CroCardTransaction("01-02-2000 00:00:00", "test", "test", BigDecimal.ZERO, BigDecimal.ZERO, "test");
+        CardTxApp.cardWallets.add(w);
+        CardTxApp.transactions.add(tx);
+
+        CroCardWallet.addTransaction(tx);
+
+        CardTxApp.cardWallets.add(w);
+
+        Application.userInterfaceCardTxApp();
+        assert true;    //looks like bs but it s not, bc we want to end the program
+        System.setIn(originalIn);
+        System.setOut(originalOut);
+
+        CroCardWallet.tts.clear();
+        CardTxApp.cardWallets.clear();
+        CardTxApp.transactions.clear();
     }
 }
