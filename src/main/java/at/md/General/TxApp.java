@@ -49,9 +49,14 @@ public class TxApp {
      * @param input csv file as String list
      * @return Transactions list
      */
-    private static ArrayList<Transaction> getTransactions(ArrayList<String> input) {
-        input.remove(0);
+    public static ArrayList<Transaction> getTransactions(ArrayList<String> input) {
         ArrayList<Transaction> transactions = new ArrayList<>();
+        if (input == null || input.isEmpty()) return transactions;
+        if (input.get(0).startsWith("Timestamp (UTC)"))
+            input.remove(0);
+        else {
+            throw new RuntimeException("Wrong file");
+        }
 
         // Create a DecimalFormat that fits your requirements
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
@@ -93,7 +98,7 @@ public class TxApp {
         return transactions;
     }
 
-    private static void createWallets() {
+    public static void createWallets() {
         for (String t : CurrencyType.currencys) {
             wallets.add(new Wallet(t, BigDecimal.ZERO, BigDecimal.ZERO));
         }
@@ -102,7 +107,7 @@ public class TxApp {
         }
     }
 
-    private static void fillWallet(ArrayList<Transaction> tr) {
+    public static void fillWallet(ArrayList<Transaction> tr) {
         for (Transaction t : tr) {
             wallets.get(0).addTransaction(t);
         }

@@ -96,4 +96,8 @@ public class Transaction {
                 ", toAmount=" + toAmount +
                 '}';
     }
+
+    public String getDescription() {
+        return description;
+    }
 }
