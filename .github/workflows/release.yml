@@ -40,7 +40,10 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: "Docker image available at `stefanbicha/crypto_parser:${{ github.ref_name }}`"
+          body: |
+            Docker image available at `stefanbicha/crypto_parser:${{ github.ref_name }}`
+
+            You need to run the Container with -it to avoid loop while user input lock
           draft: false
           prerelease: false
 
