@@ -88,4 +88,20 @@ public class CroCardWallet extends Wallet {
         return null;
     }
 
+    public void resetAll() {
+        reset();
+        txs.clear();
+    }
+
+    public static void reset() {
+        tts.clear();
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public BigDecimal getMoneySpent() {
+        return moneySpent;
+    }
 }
