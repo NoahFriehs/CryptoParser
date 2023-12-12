@@ -21,7 +21,7 @@ import static at.md.Util.Converter.ttConverter;
 
 public class Application {
 
-    public static final Scanner scanner = new Scanner(System.in);
+    public static Scanner scanner = new Scanner(System.in);
 
     static String datapath = null;
 
@@ -39,7 +39,7 @@ public class Application {
                 }
 
                 case 2 -> {
-                    CardTxApp cardTxApp = new CardTxApp(datapath, false);
+                    new CardTxApp(datapath, false);
                     userInterfaceCardTxApp();
                 }
             }
@@ -47,7 +47,7 @@ public class Application {
         }
     }
 
-    private static String getDatapath() {
+    public static String getDatapath() {
 
         System.out.println("Enter path of .csv file");
         String input;
@@ -72,7 +72,7 @@ public class Application {
      *
      * @return the entered number.
      */
-    static BigDecimal readNumber(String usage) {
+    public static BigDecimal readNumber(String usage) {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
         symbols.setGroupingSeparator(',');
         symbols.setDecimalSeparator('.');
@@ -205,7 +205,7 @@ public class Application {
                                 rightDayTX.add(t);
                             }
                         }
-                        System.out.println("" + txPerDay + " transaction(s)");
+                        System.out.println(txPerDay + " transaction(s)");
                         for (CroCardTransaction t : rightDayTX) {
                             System.out.println(t.toString());
                         }
