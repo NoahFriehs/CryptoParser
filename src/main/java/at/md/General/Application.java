@@ -61,7 +61,7 @@ public class Application {
         if (new File(input).exists())
             if (new File(input).isFile())
                 return input;
-        System.out.println("Invalid input");
+        System.out.println("Invalid input, file does not exist");
         return null;
 
     }
@@ -110,7 +110,7 @@ public class Application {
             }
 
             if (input < 0 || input > 3)
-                System.out.println("Invalid input");
+                System.out.println("Invalid input, try 0 or 1 or 2 or 3");
             else return input;
 
         }
@@ -122,7 +122,7 @@ public class Application {
             System.out.print(">");
             int value = readNumber("").intValue();
             if (value < 0 || (value > 4 && value != 9)) {
-                System.out.println("Invalid input");
+                System.out.println("Invalid input, try 0 or 1 or 2 or 3 or 4 or 9");
                 continue;
             }
 
@@ -390,7 +390,7 @@ public class Application {
     }
 
 
-    static void userInstructionsTxApp() {
+    public static void userInstructionsTxApp() {
         System.out.println("Press 0 to exit");
         System.out.println("Press 1 to get all transactions from 1 wallet");
         System.out.println("Press 2 to get transactions by transaction type");

@@ -32,14 +32,11 @@ public class App2Test {
 
     @Test
     public void testUserInstructionsCardTxApp() {
-        // Redirecting System.out to access it later
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        // Execute userInstructionsCardTxApp
         userInstructionsCardTxApp();
 
-        // Check if the output is correct
         String expectedOutput0 = "Press 0 to exit";
         String expectedOutput1 = "Press 1 to get all transactions from 1 type";
         String expectedOutput2 = "Press 2 to get transaction by amount";
@@ -53,5 +50,28 @@ public class App2Test {
         assertTrue(outContent.toString().contains(expectedOutput3));
         assertTrue(outContent.toString().contains(expectedOutput4));
         assertTrue(outContent.toString().contains(expectedOutput9));
+    }
+
+    @Test
+    public void testUserInstructionsTxApp() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputStream));
+
+        Application.userInstructionsTxApp();
+
+        System.setOut(System.out);
+        String expectedOutput = "Press 0 to exit\n" +
+                "Press 1 to get all transactions from 1 wallet\n" +
+                "Press 2 to get transactions by transaction type\n" +
+                "Press 3 to get transaction by amount\n" +
+                "Press 4 to get transaction by native amount\n" +
+                "Press 5 to get transaction by transaction hash\n" +
+                "Press 6 to get transaction by date\n" +
+                "Press 7 to get all wallets\n" +
+                "Press 8 to get outside Wallet by name\n" +
+                "Press 9 for help\n";
+
+        assertEquals(outputStream.toString(), expectedOutput);
+
     }
 }
