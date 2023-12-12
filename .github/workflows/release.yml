@@ -29,8 +29,8 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t StefanBicha/crypto_parser:${{ github.ref }} .
-          docker push StefanBicha/crypto_parser:${{ github.ref }}
+          docker build -t stefanbicha/crypto_parser:${{ github.ref }} .
+          docker push stefanbicha/crypto_parser:${{ github.ref }}
 
       - name: Create Release
         id: create_release
@@ -40,7 +40,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body: "Docker image available at `StefanBicha/crypto_parser:${{ github.ref_name }}`"
+          body: "Docker image available at `stefanbicha/crypto_parser:${{ github.ref_name }}`"
           draft: false
           prerelease: false
 
