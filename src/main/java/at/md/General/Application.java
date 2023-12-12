@@ -223,7 +223,7 @@ public class Application {
         }
     }
 
-    static void userInstructionsCardTxApp() {
+    public static void userInstructionsCardTxApp() {
 
         System.out.println("Press 0 to exit");
         System.out.println("Press 1 to get all transactions from 1 type");
