@@ -4,6 +4,7 @@ import at.md.General.TxApp;
 import at.md.Transactions.Transaction;
 import at.md.Transactions.TransactionType;
 import at.md.Util.Converter;
+import at.md.Util.CurrencyType;
 import org.testng.annotations.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,23 +46,38 @@ public class TxAppTest {
 
         assertEquals(0, TxApp.wallets.size());
         assertEquals(0, TxApp.outsideWallets.size());
+
+        CurrencyType.currencys.add("EUR");
+        CurrencyType.currencys.add("USD");
+
+        TxApp.createWallets();
+
+        assertEquals(2, TxApp.wallets.size());
+        assertEquals(2, TxApp.outsideWallets.size());
+
+        assertEquals("EUR", TxApp.wallets.get(0).getCurrencyType());
+        assertEquals("USD", TxApp.wallets.get(1).getCurrencyType());
+
+        assertEquals("EUR", TxApp.outsideWallets.get(0).getCurrencyType());
+        assertEquals("USD", TxApp.outsideWallets.get(1).getCurrencyType());
+
+        CurrencyType.currencys.clear();
+        TxApp.wallets.clear();
+        TxApp.outsideWallets.clear();
     }
 
     // The fillWallet method should add each transaction to the first wallet in the internal wallets list
     @Test
     public void test_fill_wallet() {
-        // Arrange
         ArrayList<Transaction> transactions = new ArrayList<>();
-        Transaction transaction1 = new Transaction("2022-01-01", "Test Transaction 1", "USD", BigDecimal.valueOf(100.00), BigDecimal.valueOf(100.00), TransactionType.crypto_purchase);
-        Transaction transaction2 = new Transaction("2022-01-02", "Test Transaction 2", "USD", BigDecimal.valueOf(200.00), BigDecimal.valueOf(200.00), TransactionType.crypto_purchase);
+        Transaction transaction1 = new Transaction("2022-01-01", "Test Transaction 1", "EUR", BigDecimal.valueOf(100.00), BigDecimal.valueOf(100.00), TransactionType.crypto_purchase);
+        Transaction transaction2 = new Transaction("2022-01-02", "Test Transaction 2", "EUR", BigDecimal.valueOf(200.00), BigDecimal.valueOf(200.00), TransactionType.crypto_purchase);
         transactions.add(transaction1);
         transactions.add(transaction2);
         TxApp.createWallets();
 
-        // Act
         TxApp.fillWallet(transactions);
 
-        // Assert
         assertEquals(1, TxApp.wallets.size());
         assertEquals(2, TxApp.wallets.get(0).getTransactions().size());
         assertEquals(transaction1, TxApp.wallets.get(0).getTransactions().get(0));
@@ -87,15 +103,12 @@ public class TxAppTest {
     // If the amount or nativeAmount in a Transaction object is zero, it should be set to BigDecimal.ZERO
     @Test
     public void test_zero_amount() {
-        // Arrange
         ArrayList<String> input = new ArrayList<>();
         input.add("Timestamp (UTC),Transaction Description,Currency,Amount,To Currency,To Amount,Native Currency,Native Amount,Native Amount (in USD),Transaction Kind,Transaction Hash");
         input.add("2022-08-06 21:38:10,Card Cashback,CRO,0,,,EUR,0,0,referral_card_cashback,");
 
-        // Act
         ArrayList<Transaction> result = TxApp.getTransactions(input);
 
-        // Assert
         assertEquals(1, result.size());
         assertEquals(BigDecimal.ZERO.doubleValue(), result.get(0).getAmount().doubleValue());
         assertEquals(BigDecimal.ZERO.doubleValue(), result.get(0).getNativeAmount().doubleValue());
