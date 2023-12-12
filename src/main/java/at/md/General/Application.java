@@ -116,7 +116,7 @@ public class Application {
         }
     }
 
-    static void userInterfaceCardTxApp() {
+    public static void userInterfaceCardTxApp() {
         userInstructionsCardTxApp();
         while (true) {
             System.out.print(">");

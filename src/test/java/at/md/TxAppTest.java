@@ -42,6 +42,11 @@ public class TxAppTest {
     // The createWallets method should create two empty wallet lists, one for internal wallets and one for outside wallets
     @Test
     public void test_create_wallets() {
+        TxApp.wallets.clear();
+        TxApp.outsideWallets.clear();
+        TxApp.transactions.clear();
+        CurrencyType.currencys.clear();
+
         TxApp.createWallets();
 
         assertEquals(0, TxApp.wallets.size());
@@ -69,6 +74,11 @@ public class TxAppTest {
     // The fillWallet method should add each transaction to the first wallet in the internal wallets list
     @Test
     public void test_fill_wallet() {
+        TxApp.wallets.clear();
+        TxApp.outsideWallets.clear();
+        TxApp.transactions.clear();
+        CurrencyType.currencys.clear();
+
         ArrayList<Transaction> transactions = new ArrayList<>();
         Transaction transaction1 = new Transaction("2022-01-01", "Test Transaction 1", "EUR", BigDecimal.valueOf(100.00), BigDecimal.valueOf(100.00), TransactionType.crypto_purchase);
         Transaction transaction2 = new Transaction("2022-01-02", "Test Transaction 2", "EUR", BigDecimal.valueOf(200.00), BigDecimal.valueOf(200.00), TransactionType.crypto_purchase);
