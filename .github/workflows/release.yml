@@ -3,7 +3,7 @@ name: Publish Release
 on:
   push:
     tags:
-      - 'version*'
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   build-and-release:
@@ -21,6 +21,17 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
+  -     name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t StefanBicha/crypto_parser:${{ github.ref }} .
+          docker push StefanBicha/crypto_parser:${{ github.ref }}
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -28,7 +39,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          release_name: Release version ${{ github.ref }}
+          body: "Docker image available at `StefanBicha/crypto_parser:${{ github.ref_name }}`"
           draft: false
           prerelease: false
 
