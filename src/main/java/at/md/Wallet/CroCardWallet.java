@@ -80,7 +80,11 @@ public class CroCardWallet extends Wallet {
         if (tt.equals("EUR -> EUR")) return null;   //TODO: fix Currencies
 
         for (CroCardWallet w : cardWallets) {
-            if (w.transactionType.contains(tt.substring(0, tt.indexOf(" ")))){
+            boolean maybe = tt.contains(" ");
+            if (maybe && w.transactionType.contains(tt.substring(0, tt.indexOf(" ")))) {
+                return w;
+            }
+            if (w.transactionType.contains(tt)){
                 return w;
             }
         }
