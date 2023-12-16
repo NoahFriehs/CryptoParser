@@ -192,7 +192,7 @@ Create Github realese and upload the jar Artifact into the release and print out
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          release_name: Release ${{ github.ref }} 
           body: |
             Docker image available at `stefanbicha/crypto_parser:${{ github.ref_name }}`
 
