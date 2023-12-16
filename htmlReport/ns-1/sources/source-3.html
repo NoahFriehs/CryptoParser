@@ -1,0 +1,220 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > TxApp</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">at.md.General</a>
+</div>
+
+<h1>Coverage Summary for Class: TxApp (at.md.General)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TxApp</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    61,7%
+  </span>
+  <span class="absValue">
+    (37/60)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package at.md.General;
+&nbsp;
+&nbsp;import at.md.Transactions.Transaction;
+&nbsp;import at.md.Transactions.TransactionType;
+&nbsp;import at.md.Util.CurrencyType;
+&nbsp;import at.md.Util.IOHandler;
+&nbsp;import at.md.Util.TimeSpan;
+&nbsp;import at.md.Wallet.Wallet;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.text.DecimalFormat;
+&nbsp;import java.text.DecimalFormatSymbols;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;
+&nbsp;import static at.md.Util.Converter.ttConverter;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;public class TxApp {</b>
+&nbsp;
+<b class="fc">&nbsp;    public static ArrayList&lt;Wallet&gt; wallets = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;    public static ArrayList&lt;Wallet&gt; outsideWallets = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;    public static ArrayList&lt;Transaction&gt; transactions = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;    public static void main(String[] args) {
+&nbsp;        try {
+<b class="nc">&nbsp;            TimeSpan timeSpan = new TimeSpan();</b>
+<b class="nc">&nbsp;            timeSpan.start();</b>
+<b class="nc">&nbsp;            transactions = getTransactions(IOHandler.readFile(args[0]));</b>
+<b class="nc">&nbsp;            System.out.println( &quot;getTransactions msecs: &quot; + timeSpan.end());</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        System.out.println(&quot;We have &quot; + transactions.size() + &quot; transaction(s).&quot;);</b>
+<b class="nc">&nbsp;        TimeSpan timeSpan = new TimeSpan();</b>
+<b class="nc">&nbsp;        timeSpan.start();</b>
+<b class="nc">&nbsp;        createWallets();</b>
+<b class="nc">&nbsp;        System.out.println( &quot;createWallets msecs: &quot; + timeSpan.end());</b>
+<b class="nc">&nbsp;        timeSpan.start();</b>
+<b class="nc">&nbsp;        fillWallet(transactions);</b>
+<b class="nc">&nbsp;        System.out.println( &quot;fillWallet msecs: &quot; + timeSpan.end());</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Csv file to Transaction list
+&nbsp;     *
+&nbsp;     * @param input csv file as String list
+&nbsp;     * @return Transactions list
+&nbsp;     */
+&nbsp;    public static ArrayList&lt;Transaction&gt; getTransactions(ArrayList&lt;String&gt; input) {
+<b class="fc">&nbsp;        ArrayList&lt;Transaction&gt; transactions = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        if (input == null || input.isEmpty()) return transactions;</b>
+<b class="fc">&nbsp;        if (input.get(0).startsWith(&quot;Timestamp (UTC)&quot;))</b>
+<b class="fc">&nbsp;            input.remove(0);</b>
+&nbsp;        else {
+<b class="fc">&nbsp;            throw new RuntimeException(&quot;Wrong file&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Create a DecimalFormat that fits your requirements
+<b class="fc">&nbsp;        DecimalFormatSymbols symbols = new DecimalFormatSymbols();</b>
+<b class="fc">&nbsp;        symbols.setGroupingSeparator(&#39;,&#39;);</b>
+<b class="fc">&nbsp;        symbols.setDecimalSeparator(&#39;.&#39;);</b>
+<b class="fc">&nbsp;        String pattern = &quot;#,##&quot;;</b>
+<b class="fc">&nbsp;        DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);</b>
+<b class="fc">&nbsp;        decimalFormat.setParseBigDecimal(true);</b>
+&nbsp;
+<b class="fc">&nbsp;        for (String transaction : input) {</b>
+&nbsp;            try {
+<b class="fc">&nbsp;                String[] sa = transaction.split(&quot;,&quot;);</b>
+<b class="fc">&nbsp;                if (sa.length == 10 || sa.length == 11) {</b>
+&nbsp;                    Transaction t;
+<b class="fc">&nbsp;                    if (Double.parseDouble(sa[3]) == 0) {</b>
+<b class="fc">&nbsp;                        if (Double.parseDouble(sa[7]) == 0) {</b>
+<b class="fc">&nbsp;                            t = new Transaction(sa[0], sa[1], sa[2], BigDecimal.ZERO, BigDecimal.ZERO, ttConverter(sa[9]));</b>
+&nbsp;                        } else {
+<b class="nc">&nbsp;                            t = new Transaction(sa[0], sa[1], sa[2], BigDecimal.ZERO, (BigDecimal) decimalFormat.parse(sa[7]), ttConverter(sa[9]));</b>
+&nbsp;                        }
+&nbsp;                    } else {
+<b class="fc">&nbsp;                        t = new Transaction(sa[0], sa[1], sa[2], (BigDecimal) decimalFormat.parse(sa[3]), (BigDecimal) decimalFormat.parse(sa[7]), ttConverter(sa[9]));</b>
+&nbsp;                    }
+<b class="fc">&nbsp;                    if (sa.length ==  11) t.setTransHash(sa[10]);</b>
+<b class="fc">&nbsp;                    if (ttConverter(sa[9]) == TransactionType.viban_purchase) {</b>
+<b class="nc">&nbsp;                        t.setToCurrency(sa[4]);</b>
+<b class="nc">&nbsp;                        t.setToAmount(BigDecimal.valueOf(Double.parseDouble(sa[5])));</b>
+&nbsp;                    }
+<b class="fc">&nbsp;                    transactions.add(t);</b>
+&nbsp;
+<b class="fc">&nbsp;                } else {</b>
+<b class="nc">&nbsp;                    System.out.println(Arrays.toString(sa));</b>
+<b class="nc">&nbsp;                    System.out.println(sa.length);</b>
+&nbsp;                }
+<b class="nc">&nbsp;            } catch (Exception e) {</b>
+<b class="nc">&nbsp;                throw new RuntimeException(e);</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        return transactions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void createWallets() {
+<b class="fc">&nbsp;        for (String t : CurrencyType.currencys) {</b>
+<b class="fc">&nbsp;            wallets.add(new Wallet(t, BigDecimal.ZERO, BigDecimal.ZERO));</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        for (String t : CurrencyType.currencys) {</b>
+<b class="fc">&nbsp;            outsideWallets.add(new Wallet(t, BigDecimal.ZERO, BigDecimal.ZERO));</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void fillWallet(ArrayList&lt;Transaction&gt; tr) {
+<b class="fc">&nbsp;        for (Transaction t : tr) {</b>
+<b class="fc">&nbsp;            wallets.get(0).addTransaction(t);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-15 21:30</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,188 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CardTxApp</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">at.md.General</a>
+</div>
+
+<h1>Coverage Summary for Class: CardTxApp (at.md.General)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CardTxApp</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5,7%
+  </span>
+  <span class="absValue">
+    (2/35)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package at.md.General;
+&nbsp;
+&nbsp;import at.md.Transactions.CroCardTransaction;
+&nbsp;import at.md.Util.IOHandler;
+&nbsp;import at.md.Wallet.CroCardWallet;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.text.DecimalFormat;
+&nbsp;import java.text.DecimalFormatSymbols;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Arrays;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;public class CardTxApp {
+&nbsp;
+<b class="fc">&nbsp;    public static ArrayList&lt;CroCardWallet&gt; cardWallets = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;    public static ArrayList&lt;CroCardTransaction&gt; transactions = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Can lead to some false wallets bc of Currencies TODO
+&nbsp;     */
+&nbsp;    public static boolean useStrictWalletType;
+&nbsp;
+<b class="nc">&nbsp;    CardTxApp(String filepath, boolean useStrictWallet) {</b>
+<b class="nc">&nbsp;        useStrictWalletType = useStrictWallet;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            transactions = getTransactions(IOHandler.readFile(filepath));</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        System.out.println(&quot;We have &quot; + transactions.size() + &quot; transaction(s).&quot;);</b>
+<b class="nc">&nbsp;        fillWallet(transactions);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;we have &quot; + cardWallets.size() + &quot; different transactions.&quot;);</b>
+&nbsp;        //CardWallet.writeAmount();
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Csv file to CroCardTransaction list
+&nbsp;     *
+&nbsp;     * @param input csv file as String list
+&nbsp;     * @return CroCardTransaction list
+&nbsp;     */
+&nbsp;    private static ArrayList&lt;CroCardTransaction&gt; getTransactions(ArrayList&lt;String&gt; input) {
+<b class="nc">&nbsp;        input.remove(0);</b>
+<b class="nc">&nbsp;        ArrayList&lt;CroCardTransaction&gt; transactions = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;        // Create a DecimalFormat that fits your requirements
+<b class="nc">&nbsp;        DecimalFormatSymbols symbols = new DecimalFormatSymbols();</b>
+<b class="nc">&nbsp;        symbols.setGroupingSeparator(&#39;,&#39;);</b>
+<b class="nc">&nbsp;        symbols.setDecimalSeparator(&#39;.&#39;);</b>
+<b class="nc">&nbsp;        String pattern = &quot;#,##&quot;;</b>
+<b class="nc">&nbsp;        DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);</b>
+<b class="nc">&nbsp;        decimalFormat.setParseBigDecimal(true);</b>
+&nbsp;
+<b class="nc">&nbsp;        for (String transaction : input) {</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                String[] sa = transaction.split(&quot;,&quot;);</b>
+<b class="nc">&nbsp;                if (sa.length == 9) {</b>
+<b class="nc">&nbsp;                    CroCardTransaction t = new CroCardTransaction(sa[0], sa[1], sa[2], (BigDecimal) decimalFormat.parse(sa[7]), (BigDecimal) decimalFormat.parse(sa[7]), (sa[1]));</b>
+&nbsp;
+<b class="nc">&nbsp;                    transactions.add(t);</b>
+&nbsp;
+<b class="nc">&nbsp;                } else {</b>
+<b class="nc">&nbsp;                    System.out.println(Arrays.toString(sa));</b>
+<b class="nc">&nbsp;                    System.out.println(sa.length);</b>
+&nbsp;                }
+<b class="nc">&nbsp;            } catch (Exception e) {</b>
+<b class="nc">&nbsp;                throw new RuntimeException(e);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        }</b>
+<b class="nc">&nbsp;        return transactions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    private static void fillWallet(ArrayList&lt;CroCardTransaction&gt; tr) {
+<b class="nc">&nbsp;        for (CroCardTransaction t : tr) {</b>
+<b class="nc">&nbsp;            CroCardWallet.addTransaction(t);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-15 21:30</div>
+</div>
+</body>
+</html>

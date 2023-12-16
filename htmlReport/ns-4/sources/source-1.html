@@ -1,0 +1,215 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CroCardWallet</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">at.md.Wallet</a>
+</div>
+
+<h1>Coverage Summary for Class: CroCardWallet (at.md.Wallet)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CroCardWallet</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (10/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    67,3%
+  </span>
+  <span class="absValue">
+    (33/49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package at.md.Wallet;
+&nbsp;
+&nbsp;import at.md.General.CardTxApp;
+&nbsp;import at.md.Transactions.CroCardTransaction;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;import static at.md.General.CardTxApp.cardWallets;
+&nbsp;
+&nbsp;public class CroCardWallet extends Wallet {
+&nbsp;
+<b class="fc">&nbsp;    public static ArrayList&lt;String&gt; tts = new ArrayList&lt;&gt;();</b>
+&nbsp;    String transactionType;
+<b class="fc">&nbsp;    ArrayList&lt;CroCardTransaction&gt; txs = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;    public CroCardWallet(String currencyType, BigDecimal amount, String transactionType) {
+<b class="fc">&nbsp;        super(currencyType, amount, amount);</b>
+<b class="fc">&nbsp;        this.transactionType = transactionType;</b>
+<b class="fc">&nbsp;        if (!tts.contains(transactionType)) {</b>
+<b class="fc">&nbsp;            tts.add(transactionType);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void addTransaction(CroCardTransaction transaction) {
+&nbsp;
+<b class="fc">&nbsp;        String tt = transaction.getTransactionTypeString();</b>
+<b class="fc">&nbsp;        if (tts.contains(tt)) {</b>
+<b class="fc">&nbsp;            CroCardWallet w = cardWallets.get(tts.indexOf(tt));</b>
+<b class="fc">&nbsp;            w.addToCardWallet(transaction.getAmount());</b>
+<b class="fc">&nbsp;            w.txs.add(transaction);</b>
+<b class="fc">&nbsp;        } else {</b>
+&nbsp;            CroCardWallet w;
+<b class="fc">&nbsp;            if (!CardTxApp.useStrictWalletType)</b>
+&nbsp;            {
+<b class="nc">&nbsp;                w = getNonStrictWallet(tt);</b>
+<b class="nc">&nbsp;                if (w == null){</b>
+<b class="nc">&nbsp;                    w = new CroCardWallet(&quot;EUR&quot;, transaction.getAmount(), tt);</b>
+<b class="nc">&nbsp;                    w.txs.add(transaction);</b>
+<b class="nc">&nbsp;                    cardWallets.add(w);</b>
+&nbsp;                }
+&nbsp;            } else {
+<b class="fc">&nbsp;                w = new CroCardWallet(&quot;EUR&quot;, transaction.getAmount(), tt);</b>
+<b class="fc">&nbsp;                w.txs.add(transaction);</b>
+<b class="fc">&nbsp;                cardWallets.add(w);</b>
+&nbsp;            }
+&nbsp;            //w.addToCardWallet(transaction.getAmount());
+&nbsp;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void writeAmount() {
+<b class="fc">&nbsp;        BigDecimal amountSpent = BigDecimal.ZERO;</b>
+<b class="fc">&nbsp;        for (CroCardWallet w : cardWallets) {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;-&quot;.repeat(20));</b>
+<b class="fc">&nbsp;            System.out.println(w.transactionType);</b>
+<b class="fc">&nbsp;            System.out.println(w.amount);</b>
+<b class="fc">&nbsp;            System.out.println(w.moneySpent);</b>
+<b class="fc">&nbsp;            System.out.println(&quot;Transactions: &quot; + w.txs.size());</b>
+<b class="fc">&nbsp;            amountSpent = amountSpent.add(w.moneySpent);</b>
+<b class="fc">&nbsp;        }</b>
+<b class="fc">&nbsp;        System.out.println(&quot;-&quot;.repeat(20));</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Amount total spent: &quot; + amountSpent);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void addToCardWallet(BigDecimal amount) {
+<b class="fc">&nbsp;        this.amount = this.amount.add(amount);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ArrayList&lt;CroCardTransaction&gt; getTxs() {
+<b class="fc">&nbsp;        return txs;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getTransactionType() {
+<b class="fc">&nbsp;        return transactionType;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static CroCardWallet getNonStrictWallet(String tt){
+&nbsp;
+<b class="nc">&nbsp;        if (tt.equals(&quot;EUR -&gt; EUR&quot;)) return null;   //TODO: fix Currencies</b>
+&nbsp;
+<b class="nc">&nbsp;        for (CroCardWallet w : cardWallets) {</b>
+<b class="nc">&nbsp;            boolean maybe = tt.contains(&quot; &quot;);</b>
+<b class="nc">&nbsp;            if (maybe &amp;&amp; w.transactionType.contains(tt.substring(0, tt.indexOf(&quot; &quot;)))) {</b>
+<b class="nc">&nbsp;                return w;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            if (w.transactionType.contains(tt)){</b>
+<b class="nc">&nbsp;                return w;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void resetAll() {
+<b class="nc">&nbsp;        reset();</b>
+<b class="nc">&nbsp;        txs.clear();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void reset() {
+<b class="fc">&nbsp;        tts.clear();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public BigDecimal getAmount() {
+<b class="fc">&nbsp;        return amount;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public BigDecimal getMoneySpent() {
+<b class="fc">&nbsp;        return moneySpent;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-15 21:30</div>
+</div>
+</body>
+</html>

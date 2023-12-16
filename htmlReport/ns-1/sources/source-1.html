@@ -1,0 +1,509 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Application</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">at.md.General</a>
+</div>
+
+<h1>Coverage Summary for Class: Application (at.md.General)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Application</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (5/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (49/245)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package at.md.General;
+&nbsp;
+&nbsp;import at.md.Transactions.CroCardTransaction;
+&nbsp;import at.md.Transactions.Transaction;
+&nbsp;import at.md.Transactions.TransactionType;
+&nbsp;import at.md.Util.Converter;
+&nbsp;import at.md.Util.CurrencyType;
+&nbsp;import at.md.Wallet.CroCardWallet;
+&nbsp;import at.md.Wallet.Wallet;
+&nbsp;
+&nbsp;import java.io.File;
+&nbsp;import java.math.BigDecimal;
+&nbsp;import java.text.DecimalFormat;
+&nbsp;import java.text.DecimalFormatSymbols;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.Objects;
+&nbsp;import java.util.Scanner;
+&nbsp;
+&nbsp;import static at.md.Util.Converter.stringToDateConverter;
+&nbsp;import static at.md.Util.Converter.ttConverter;
+&nbsp;
+<b class="nc">&nbsp;public class Application {</b>
+&nbsp;
+<b class="fc">&nbsp;    public static Scanner scanner = new Scanner(System.in);</b>
+&nbsp;
+<b class="fc">&nbsp;    static String datapath = null;</b>
+&nbsp;
+&nbsp;    public static void main(String[] args) {
+&nbsp;
+&nbsp;        while (true) {
+<b class="nc">&nbsp;            switch (userInterface()) {</b>
+&nbsp;                case 0 -&gt; {
+&nbsp;                    return;
+&nbsp;                }
+&nbsp;
+&nbsp;                case 1 -&gt; {
+<b class="nc">&nbsp;                    TxApp.main(new String[]{datapath});</b>
+<b class="nc">&nbsp;                    userInterfaceTxApp();</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;
+&nbsp;                case 2 -&gt; {
+<b class="nc">&nbsp;                    new CardTxApp(datapath, false);</b>
+<b class="nc">&nbsp;                    userInterfaceCardTxApp();</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static String getDatapath() {
+&nbsp;
+<b class="nc">&nbsp;        System.out.println(&quot;Enter path of .csv file&quot;);</b>
+&nbsp;        String input;
+&nbsp;        try {
+<b class="nc">&nbsp;            input = scanner.nextLine();</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Invalid input&quot;);</b>
+<b class="nc">&nbsp;            return null;</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        if (new File(input).exists())</b>
+<b class="nc">&nbsp;            if (new File(input).isFile())</b>
+<b class="nc">&nbsp;                return input;</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Invalid input, file does not exist&quot;);</b>
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Let the user enter 1 number.
+&nbsp;     *
+&nbsp;     * @return the entered number.
+&nbsp;     */
+&nbsp;    public static BigDecimal readNumber(String usage) {
+<b class="fc">&nbsp;        DecimalFormatSymbols symbols = new DecimalFormatSymbols();</b>
+<b class="fc">&nbsp;        symbols.setGroupingSeparator(&#39;,&#39;);</b>
+<b class="fc">&nbsp;        symbols.setDecimalSeparator(&#39;.&#39;);</b>
+<b class="fc">&nbsp;        String pattern = &quot;#,##&quot;;</b>
+<b class="fc">&nbsp;        DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);</b>
+<b class="fc">&nbsp;        decimalFormat.setParseBigDecimal(true);</b>
+&nbsp;        while (true) {
+<b class="fc">&nbsp;            System.out.print(usage); //usage</b>
+&nbsp;            BigDecimal value;
+&nbsp;            try {
+<b class="fc">&nbsp;                value = (BigDecimal) decimalFormat.parse(scanner.nextLine());</b>
+<b class="nc">&nbsp;            } catch (Exception e) {</b>
+<b class="nc">&nbsp;                System.out.println(&quot;Invalid input&quot;);</b>
+<b class="nc">&nbsp;                continue;</b>
+<b class="fc">&nbsp;            }</b>
+<b class="fc">&nbsp;            return value;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    static int userInterface() {
+&nbsp;
+<b class="nc">&nbsp;        while (datapath == null) {</b>
+<b class="nc">&nbsp;            datapath = getDatapath();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        System.out.println(&quot;Enter 0 to exit&quot;);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Enter 1 to access wallets&quot;);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Enter 2 to access cards&quot;);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Enter 3 to enter a new path of .csv file&quot;);</b>
+&nbsp;        while (true) {
+<b class="nc">&nbsp;            int input = readNumber(&quot;&quot;).intValue();</b>
+<b class="nc">&nbsp;            if (input ==  3){</b>
+<b class="nc">&nbsp;                datapath = null;</b>
+<b class="nc">&nbsp;                while (datapath == null) datapath = getDatapath();</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            if (input &lt; 0 || input &gt; 3)</b>
+<b class="nc">&nbsp;                System.out.println(&quot;Invalid input, try 0 or 1 or 2 or 3&quot;);</b>
+<b class="nc">&nbsp;            else return input;</b>
+&nbsp;
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void userInterfaceCardTxApp() {
+<b class="fc">&nbsp;        userInstructionsCardTxApp();</b>
+&nbsp;        while (true) {
+<b class="fc">&nbsp;            System.out.print(&quot;&gt;&quot;);</b>
+<b class="fc">&nbsp;            int value = readNumber(&quot;&quot;).intValue();</b>
+<b class="fc">&nbsp;            if (value &lt; 0 || (value &gt; 4 &amp;&amp; value != 9)) {</b>
+<b class="nc">&nbsp;                System.out.println(&quot;Invalid input, try 0 or 1 or 2 or 3 or 4 or 9&quot;);</b>
+<b class="nc">&nbsp;                continue;</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            switch (value) {</b>
+&nbsp;                case 0 -&gt; {
+&nbsp;                    return;
+&nbsp;                }
+&nbsp;
+&nbsp;                case 1 -&gt; {
+<b class="fc">&nbsp;                    System.out.println(&quot;Enter the type you want to display: &quot;);</b>
+<b class="fc">&nbsp;                    String s = scanner.nextLine();</b>
+&nbsp;                    try {
+<b class="fc">&nbsp;                        for (CroCardWallet w : CardTxApp.cardWallets) {</b>
+<b class="fc">&nbsp;                            if (w.getTransactionType().contains(s)) {</b>
+<b class="fc">&nbsp;                                for (CroCardTransaction tx : w.getTxs())</b>
+<b class="fc">&nbsp;                                    System.out.println(tx.toString());</b>
+&nbsp;                            }
+<b class="fc">&nbsp;                        }</b>
+<b class="nc">&nbsp;                    } catch (Exception e) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;Invalid Input&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;                    }</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;
+&nbsp;                case 2 -&gt; {
+<b class="fc">&nbsp;                    BigDecimal bd = readNumber(&quot;Enter the transaction amount: &quot;);</b>
+<b class="fc">&nbsp;                    for (CroCardTransaction t : CardTxApp.transactions) {</b>
+<b class="fc">&nbsp;                        if (Objects.equals(t.getAmount(), bd)) {</b>
+<b class="fc">&nbsp;                            System.out.println(t);</b>
+&nbsp;                        }
+<b class="fc">&nbsp;                    }</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;
+&nbsp;                case 3 -&gt; {
+<b class="nc">&nbsp;                    System.out.print(&quot;Enter the year (yyyy): &quot;);</b>
+<b class="nc">&nbsp;                    int year = readNumber(&quot;&quot;).intValue();</b>
+<b class="nc">&nbsp;                    ArrayList&lt;CroCardTransaction&gt; rightTX = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;                    ArrayList&lt;CroCardTransaction&gt; rightMonthTX = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;                    ArrayList&lt;CroCardTransaction&gt; rightDayTX = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;                    int txPerYear = 0;</b>
+<b class="nc">&nbsp;                    int txPerMonth = 0;</b>
+<b class="nc">&nbsp;                    int txPerDay = 0;</b>
+<b class="nc">&nbsp;                    for (CroCardTransaction t : CardTxApp.transactions) {</b>
+<b class="nc">&nbsp;                        if (Integer.parseInt(Converter.stringToDateConverter(t.getDate()).substring(0, 4)) == year) {</b>
+<b class="nc">&nbsp;                            txPerYear++;</b>
+<b class="nc">&nbsp;                            rightTX.add(t);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                    System.out.print(&quot;Press 0 to view &quot; + txPerYear + &quot; transaction(s) or enter month (MM): &quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;                    int month = readNumber(&quot;&quot;).intValue();</b>
+&nbsp;
+<b class="nc">&nbsp;                    if (month == 0) {</b>
+<b class="nc">&nbsp;                        for (CroCardTransaction t : rightTX) {</b>
+<b class="nc">&nbsp;                            System.out.println(t.toString());</b>
+<b class="nc">&nbsp;                        }</b>
+<b class="nc">&nbsp;                        break;</b>
+&nbsp;                    } else {
+&nbsp;
+<b class="nc">&nbsp;                        for (CroCardTransaction t : rightTX) {</b>
+<b class="nc">&nbsp;                            if (Integer.parseInt(stringToDateConverter(t.getDate()).substring(5, 7)) == month) {</b>
+<b class="nc">&nbsp;                                txPerMonth++;</b>
+<b class="nc">&nbsp;                                rightMonthTX.add(t);</b>
+&nbsp;                            }
+<b class="nc">&nbsp;                        }</b>
+&nbsp;                    }
+&nbsp;
+<b class="nc">&nbsp;                    System.out.print(&quot;Press 0 to view &quot; + txPerMonth + &quot; transaction(s) or enter day&quot;);</b>
+<b class="nc">&nbsp;                    int day = readNumber(&quot;&quot;).intValue();</b>
+&nbsp;
+<b class="nc">&nbsp;                    if (day == 0) {</b>
+<b class="nc">&nbsp;                        for (CroCardTransaction t : rightMonthTX) {</b>
+<b class="nc">&nbsp;                            System.out.println(t.toString());</b>
+<b class="nc">&nbsp;                        }</b>
+&nbsp;                    } else {
+&nbsp;
+<b class="nc">&nbsp;                        for (CroCardTransaction t : rightMonthTX) {</b>
+<b class="nc">&nbsp;                            if (Integer.parseInt(stringToDateConverter(t.getDate()).substring(8, 10)) == day) {</b>
+<b class="nc">&nbsp;                                txPerDay++;</b>
+<b class="nc">&nbsp;                                rightDayTX.add(t);</b>
+&nbsp;                            }
+<b class="nc">&nbsp;                        }</b>
+<b class="nc">&nbsp;                        System.out.println(txPerDay + &quot; transaction(s)&quot;);</b>
+<b class="nc">&nbsp;                        for (CroCardTransaction t : rightDayTX) {</b>
+<b class="nc">&nbsp;                            System.out.println(t.toString());</b>
+<b class="nc">&nbsp;                        }</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                }</b>
+&nbsp;
+&nbsp;                case 4 -&gt; {
+<b class="nc">&nbsp;                    CroCardWallet.writeAmount();</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;
+&nbsp;                case 9 -&gt; {
+<b class="nc">&nbsp;                    userInstructionsCardTxApp();</b>
+&nbsp;                }
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void userInstructionsCardTxApp() {
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;Press 0 to exit&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 1 to get all transactions from 1 type&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 2 to get transaction by amount&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 3 to get transaction by date&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 4 to get all different transactions with amount&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 9 for help&quot;);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    static void userInterfaceTxApp() {
+<b class="nc">&nbsp;        userInstructionsTxApp();</b>
+<b class="nc">&nbsp;        boolean continued = true;</b>
+<b class="nc">&nbsp;        while (continued) {</b>
+<b class="nc">&nbsp;            int value = readNumber(&quot;&quot;).intValue();</b>
+<b class="nc">&nbsp;            if (value &lt; 0 || (value &gt; 8 &amp;&amp; value != 9)) {</b>
+<b class="nc">&nbsp;                System.out.println(&quot;Invalid input&quot;);</b>
+<b class="nc">&nbsp;                continue;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            switch (value) {</b>
+<b class="nc">&nbsp;                case 0 -&gt; continued = false;</b>
+&nbsp;                case 1 -&gt; {
+<b class="nc">&nbsp;                    System.out.println(&quot;Enter the Wallet you want to use: &quot;);</b>
+<b class="nc">&nbsp;                    String s = scanner.nextLine();</b>
+&nbsp;                    try {
+<b class="nc">&nbsp;                        if (!CurrencyType.currencys.contains(s)) continue;</b>
+<b class="nc">&nbsp;                        for (Wallet w : TxApp.wallets) {</b>
+<b class="nc">&nbsp;                            if (w.getCurrencyType().equals(s)) {</b>
+<b class="nc">&nbsp;                                for (Transaction tx : w.getTransactions())</b>
+<b class="nc">&nbsp;                                    System.out.println(tx.toString());</b>
+&nbsp;                            }
+<b class="nc">&nbsp;                        }</b>
+<b class="nc">&nbsp;                        for (Wallet w : TxApp.outsideWallets) {</b>
+<b class="nc">&nbsp;                            if (w.getCurrencyType().equals(s)) {</b>
+<b class="nc">&nbsp;                                for (Transaction tx : w.getTransactions())</b>
+<b class="nc">&nbsp;                                    System.out.println(tx.toString());</b>
+&nbsp;                            }
+<b class="nc">&nbsp;                        }</b>
+<b class="nc">&nbsp;                    } catch (Exception e) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;Invalid Input&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;                case 2 -&gt; {
+<b class="nc">&nbsp;                    System.out.println(&quot;Enter the transaction type: &quot;);</b>
+<b class="nc">&nbsp;                    String s = scanner.nextLine();</b>
+&nbsp;                    try {
+<b class="nc">&nbsp;                        TransactionType tt = ttConverter(s);</b>
+<b class="nc">&nbsp;                        for (Transaction t : TxApp.transactions) {</b>
+<b class="nc">&nbsp;                            if (t.getTransactionType().equals(tt)) {</b>
+<b class="nc">&nbsp;                                System.out.println(t);</b>
+&nbsp;                            }
+<b class="nc">&nbsp;                        }</b>
+&nbsp;
+<b class="nc">&nbsp;                    } catch (Exception e) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;Invalid Input&quot;);</b>
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;                case 3 -&gt; {
+<b class="nc">&nbsp;                    BigDecimal bd = readNumber(&quot;Enter the transaction amount: &quot;);</b>
+<b class="nc">&nbsp;                    for (Transaction t : TxApp.transactions) {</b>
+<b class="nc">&nbsp;                        if (Objects.equals(t.getAmount(), bd)) {</b>
+<b class="nc">&nbsp;                            System.out.println(t);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;                case 4 -&gt; {
+<b class="nc">&nbsp;                    BigDecimal bd = readNumber(&quot;Enter the native amount: &quot;);</b>
+<b class="nc">&nbsp;                    for (Transaction t : TxApp.transactions) {</b>
+<b class="nc">&nbsp;                        if (Objects.equals(t.getNativeAmount(), bd)) {</b>
+<b class="nc">&nbsp;                            System.out.println(t);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;                case 5 -&gt; {
+<b class="nc">&nbsp;                    System.out.println(&quot;Enter the transaction hash: &quot;);</b>
+<b class="nc">&nbsp;                    String s = scanner.nextLine();</b>
+<b class="nc">&nbsp;                    for (Transaction t : TxApp.transactions) {</b>
+<b class="nc">&nbsp;                        if (Objects.equals(t.getTransHash(), s)) {</b>
+<b class="nc">&nbsp;                            System.out.println(t);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;                case 6 -&gt; {
+<b class="nc">&nbsp;                    System.out.print(&quot;Enter the year (yyyy): &quot;);</b>
+<b class="nc">&nbsp;                    int year = readNumber(&quot;&quot;).intValue();</b>
+<b class="nc">&nbsp;                    ArrayList&lt;Transaction&gt; rightTX = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;                    ArrayList&lt;Transaction&gt; rightMonthTX = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;                    ArrayList&lt;Transaction&gt; rightDayTX = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;                    int txPerYear = 0;</b>
+<b class="nc">&nbsp;                    int txPerMonth = 0;</b>
+<b class="nc">&nbsp;                    int txPerDay = 0;</b>
+<b class="nc">&nbsp;                    for (Transaction t : TxApp.transactions) {</b>
+<b class="nc">&nbsp;                        if (Integer.parseInt(Converter.stringToDateConverter(t.getDate()).substring(0, 4)) == year) {</b>
+<b class="nc">&nbsp;                            txPerYear++;</b>
+<b class="nc">&nbsp;                            rightTX.add(t);</b>
+&nbsp;                        }
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                    System.out.print(&quot;Press 0 to view &quot; + txPerYear + &quot; transaction(s) or enter month (MM): &quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;                    int month = readNumber(&quot;&quot;).intValue();</b>
+&nbsp;
+<b class="nc">&nbsp;                    if (month == 0) {</b>
+<b class="nc">&nbsp;                        for (Transaction t : rightTX) {</b>
+<b class="nc">&nbsp;                            System.out.println(t.toString());</b>
+<b class="nc">&nbsp;                        }</b>
+<b class="nc">&nbsp;                        break;</b>
+&nbsp;                    } else {
+&nbsp;
+<b class="nc">&nbsp;                        for (Transaction t : rightTX) {</b>
+<b class="nc">&nbsp;                            if (Integer.parseInt(stringToDateConverter(t.getDate()).substring(5, 7)) == month) {</b>
+<b class="nc">&nbsp;                                txPerMonth++;</b>
+<b class="nc">&nbsp;                                rightMonthTX.add(t);</b>
+&nbsp;                            }
+<b class="nc">&nbsp;                        }</b>
+&nbsp;                    }
+&nbsp;
+<b class="nc">&nbsp;                    System.out.print(&quot;Press 0 to view &quot; + txPerMonth + &quot; transaction(s) or enter day&quot;);</b>
+<b class="nc">&nbsp;                    int day = readNumber(&quot;&quot;).intValue();</b>
+&nbsp;
+<b class="nc">&nbsp;                    if (day == 0) {</b>
+<b class="nc">&nbsp;                        for (Transaction t : rightMonthTX) {</b>
+<b class="nc">&nbsp;                            System.out.println(t.toString());</b>
+<b class="nc">&nbsp;                        }</b>
+&nbsp;                    } else {
+&nbsp;
+<b class="nc">&nbsp;                        for (Transaction t : rightMonthTX) {</b>
+<b class="nc">&nbsp;                            if (Integer.parseInt(stringToDateConverter(t.getDate()).substring(8, 10)) == day) {</b>
+<b class="nc">&nbsp;                                txPerDay++;</b>
+<b class="nc">&nbsp;                                rightDayTX.add(t);</b>
+&nbsp;                            }
+<b class="nc">&nbsp;                        }</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;&quot; + txPerDay + &quot; transaction(s)&quot;);</b>
+<b class="nc">&nbsp;                        for (Transaction t : rightDayTX) {</b>
+<b class="nc">&nbsp;                            System.out.println(t.toString());</b>
+<b class="nc">&nbsp;                        }</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                }</b>
+&nbsp;
+<b class="nc">&nbsp;                case 7 -&gt; Wallet.writeAmount();</b>
+&nbsp;
+&nbsp;                case 8 -&gt; {
+<b class="nc">&nbsp;                    System.out.println(&quot;Enter the outside Wallet you want to inspect: &quot;);</b>
+<b class="nc">&nbsp;                    String s = scanner.nextLine();</b>
+&nbsp;                    try {
+<b class="nc">&nbsp;                        if (!CurrencyType.currencys.contains(s)) continue;</b>
+<b class="nc">&nbsp;                        for (Wallet w : TxApp.outsideWallets) {</b>
+<b class="nc">&nbsp;                            if (w.getCurrencyType().equals(s)) {</b>
+<b class="nc">&nbsp;                                for (Transaction tx : w.getTransactions())</b>
+<b class="nc">&nbsp;                                    System.out.println(tx.toString());</b>
+&nbsp;                            }
+<b class="nc">&nbsp;                        }</b>
+<b class="nc">&nbsp;                    } catch (Exception e) {</b>
+<b class="nc">&nbsp;                        System.out.println(&quot;Invalid Input&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;                    }</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;
+<b class="nc">&nbsp;                case 9 -&gt; userInstructionsTxApp();</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public static void userInstructionsTxApp() {
+<b class="fc">&nbsp;        System.out.println(&quot;Press 0 to exit&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 1 to get all transactions from 1 wallet&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 2 to get transactions by transaction type&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 3 to get transaction by amount&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 4 to get transaction by native amount&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 5 to get transaction by transaction hash&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 6 to get transaction by date&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 7 to get all wallets&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 8 to get outside Wallet by name&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Press 9 for help&quot;);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-15 21:30</div>
+</div>
+</body>
+</html>
