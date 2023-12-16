@@ -3,11 +3,13 @@ name: Publish Release
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -44,7 +46,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: |
-            Docker image available at `stefanbicha/crypto_parser:${{ github.ref_name }}`
+            Docker image available at [Docker Hub](https://hub.docker.com/r/stefanbicha/crypto_parser)
 
             You need to run the Container with -it to avoid loop while user input lock
           draft: false
