@@ -59,3 +59,13 @@ jobs:
           asset_path: ./target/CryptoParser-1.0-SNAPSHOT.jar
           asset_name: CryptoParser-1.0-SNAPSHOT.jar
           asset_content_type: application/java-archive
+
+      - name: Upload README.md
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./ReadMe.md
+          asset_name: ReadMe.md
+          asset_content_type: text/markdown
