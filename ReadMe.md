@@ -107,8 +107,8 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
-build-and-test:
-runs-on: ubuntu-latest
+  build-and-test:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
