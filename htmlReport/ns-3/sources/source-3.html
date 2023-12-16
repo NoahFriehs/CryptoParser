@@ -1,0 +1,141 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > IOHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">at.md.Util</a>
+</div>
+
+<h1>Coverage Summary for Class: IOHandler (at.md.Util)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">IOHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90,9%
+  </span>
+  <span class="absValue">
+    (10/11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package at.md.Util;
+&nbsp;
+&nbsp;import java.io.BufferedReader;
+&nbsp;import java.io.FileReader;
+&nbsp;import java.io.IOException;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.nio.file.Path;
+&nbsp;import java.nio.file.Paths;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;public class IOHandler {</b>
+&nbsp;
+&nbsp;    public static ArrayList&lt;String&gt; readFile(String fileName) throws IOException {
+&nbsp;        // Convert the file name to a Path
+<b class="fc">&nbsp;        Path filePath = Paths.get(fileName);</b>
+&nbsp;
+&nbsp;        // If the path is not absolute, make it relative to the current working directory
+<b class="fc">&nbsp;        if (!filePath.isAbsolute()) {</b>
+&nbsp;            // Get the current working directory
+<b class="fc">&nbsp;            String currentDirectory = System.getProperty(&quot;user.dir&quot;);</b>
+&nbsp;
+&nbsp;            // Resolve the relative path against the current working directory
+<b class="fc">&nbsp;            filePath = Paths.get(currentDirectory).resolve(filePath);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Open the file using the resolved path
+<b class="fc">&nbsp;        try (BufferedReader br = new BufferedReader(new FileReader(filePath.toFile()))) {</b>
+<b class="fc">&nbsp;            ArrayList&lt;String&gt; lines = new ArrayList&lt;&gt;();</b>
+&nbsp;            String newLine;
+<b class="fc">&nbsp;            while ((newLine = br.readLine()) != null) {</b>
+<b class="fc">&nbsp;                lines.add(newLine.trim());</b>
+&nbsp;            }
+<b class="fc">&nbsp;            return lines;</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-15 21:30</div>
+</div>
+</body>
+</html>
