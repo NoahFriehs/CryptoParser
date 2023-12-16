@@ -143,11 +143,15 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 ```
 
+strategy is set to avoid workflow from continuing if any step fails
+
 build with maven on java version 17:
 ```yml
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    strategy:
+        fail-fast: true
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
