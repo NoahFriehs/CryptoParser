@@ -96,7 +96,7 @@ Die Testabdeckung wird mit der "Run with Coverage"-Funktion von IntelliJ IDEA ge
 ### Testautomatisierung/Buildautomatisierung:
 tests.yml für GitHub Actions-Workflow 
 
-```yml
+```yml 
 name: Run Tests
 
 on:
