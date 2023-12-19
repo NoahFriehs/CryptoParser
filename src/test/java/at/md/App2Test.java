@@ -76,7 +76,11 @@ public class App2Test {
                 Press 9 for help
                 """;
 
-        assertEquals(outputStream.toString(), expectedOutput);
+        String universalLineSeparator = "\r\n|\r|\n";
+        String systemLineSeparator = System.lineSeparator();
+        ;
+
+        assertEquals(outputStream.toString().replaceAll(universalLineSeparator, systemLineSeparator), expectedOutput.replaceAll(universalLineSeparator, systemLineSeparator));
 
     }
 
