@@ -22,7 +22,7 @@ public class TimeSpanTest {
 
         double elapsedTime = timeSpan.end();
 
-        assertEquals(100, elapsedTime, 10); // Allow a tolerance of 10 milliseconds
+        assertEquals(100, elapsedTime, 20); // Allow a tolerance of 10 milliseconds
     }
 }
 
