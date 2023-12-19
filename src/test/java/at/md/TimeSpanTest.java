@@ -21,6 +21,7 @@ public class TimeSpanTest {
         }
 
         double elapsedTime = timeSpan.end();
+        System.out.println("elapsedTime = " + elapsedTime);
 
         assertEquals(100, elapsedTime, 20); // Allow a tolerance of 10 milliseconds
     }
