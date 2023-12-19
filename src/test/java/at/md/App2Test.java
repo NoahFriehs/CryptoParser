@@ -36,6 +36,7 @@ public class App2Test {
     @Test
     public void testUserInstructionsCardTxApp() {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outContent));
 
         userInstructionsCardTxApp();
@@ -53,11 +54,14 @@ public class App2Test {
         assertTrue(outContent.toString().contains(expectedOutput3));
         assertTrue(outContent.toString().contains(expectedOutput4));
         assertTrue(outContent.toString().contains(expectedOutput9));
+
+        System.setOut(originalOut);
     }
 
     @Test
     public void testUserInstructionsTxApp() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
         System.setOut(new PrintStream(outputStream));
 
         Application.userInstructionsTxApp();
@@ -78,10 +82,10 @@ public class App2Test {
 
         String universalLineSeparator = "\r\n|\r|\n";
         String systemLineSeparator = System.lineSeparator();
-        ;
 
         assertEquals(outputStream.toString().replaceAll(universalLineSeparator, systemLineSeparator), expectedOutput.replaceAll(universalLineSeparator, systemLineSeparator));
 
+        System.setOut(originalOut);
     }
 
     @Test
