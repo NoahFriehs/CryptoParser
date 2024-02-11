@@ -4,12 +4,10 @@ package at.md;
 import at.md.Transactions.Transaction;
 import at.md.Transactions.TransactionType;
 import at.md.Util.Converter;
-import at.md.Util.CurrencyType;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class TransactionTest {
 
