@@ -22,6 +22,7 @@ public class IOHandlerTest {
             Files.write(tempFile, "Line 1\nLine 2\nLine 3".getBytes());
         } catch (IOException e) {
             throw new RuntimeException("Error creating temporary file for testing.", e);
+
         }
 
         // Test reading the file
